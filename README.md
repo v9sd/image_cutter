@@ -1,4 +1,4 @@
-# snail
+# image_cutter
 This python script is use for cutting image on some separated images.
 
 The following is example for cut one 4K wallpaper image to two full HD wallpaper image:
