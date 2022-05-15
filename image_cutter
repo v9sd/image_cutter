@@ -72,7 +72,7 @@ def ParseArguments():
     group = parser.add_argument_group('output')
     group.add_argument('--px', nargs=1, dest='x', type=int, help='X position of left bottom angle of output image', action=OutputSubAction)
     group.add_argument('--py', nargs=1, dest='y', type=int, help='Y position of left bottom angle of output image.', action=OutputSubAction)
-    group.add_argument('--pos','-p', nargs=2, dest='pos', type=int, help='X and y positions of left bottom angle of output image. First argument is x position and second argument is y position.', action=OutputSubAction)
+    group.add_argument('--position','-p', nargs=2, dest='pos', type=int, help='X and y positions of left bottom angle of output image. First argument is x position and second argument is y position.', action=OutputSubAction)
     group.add_argument('--sw', nargs=1, dest='w', type=int, help='Width of output image.', action=OutputSubAction)
     group.add_argument('--sh', nargs=1, dest='h', type=int, help='Height of output image.', action=OutputSubAction)
     group.add_argument('--size','-s', nargs=2, dest='s', type=int, help='width and height of output image. First argument is width and second argument is height.', action=OutputSubAction)
