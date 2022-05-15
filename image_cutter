@@ -15,14 +15,11 @@ class Vector:
     x: int = 0
     y: int = 0
 
-
 @dataclass
 class OutputData:
     pos: Vector = Vector(0,0)
     size: Vector = Vector(None,None)
     file: str = None
-
-
 
 class OutputAction(argparse.Action):
     def __init__(self, option_strings, dest, nargs=None, **kwargs):
@@ -69,18 +66,18 @@ class OutputSubAction(argparse.Action):
         setattr(namespace, OUTPUT_DEST, items_list)
 
 def ParseArguments():
-    parser=argparse.ArgumentParser(description="Application is cutting wallpaper on many monitor configurarion", add_help=True)
+    parser=argparse.ArgumentParser(description="It Application is cutting image on some separated output images. Output images according to cmd line arguments.", add_help=True)
     parser.add_argument('--input',"-i", dest="input", type=argparse.FileType('r'), help='Image file', nargs=1)
     parser.add_argument('--output',"-o", dest=OUTPUT_DEST, nargs=0 ,help='Output file', action=OutputAction)
     group = parser.add_argument_group('output')
-    group.add_argument('--px', nargs=1, dest='x', type=int, help='foo help', action=OutputSubAction)
-    group.add_argument('--py', nargs=1, dest='y', type=int, help='foo help', action=OutputSubAction)
-    group.add_argument('--pos','-p', nargs=2, dest='pos', type=int, help='foo help', action=OutputSubAction)
-    group.add_argument('--sw', nargs=1, dest='w', type=int, help='foo help', action=OutputSubAction)
-    group.add_argument('--sh', nargs=1, dest='h', type=int, help='foo help', action=OutputSubAction)
-    group.add_argument('--size','-s', nargs=2, dest='s', type=int, help='foo help', action=OutputSubAction)
-    group.add_argument('--file','-f', nargs=1, dest='f', type=str, help='foo help', action=OutputSubAction)
-    group.add_argument('--verbose', dest='verbose', help='verbose output', action='store_true')
+    group.add_argument('--px', nargs=1, dest='x', type=int, help='X position of left bottom angle of output image', action=OutputSubAction)
+    group.add_argument('--py', nargs=1, dest='y', type=int, help='Y position of left bottom angle of output image.', action=OutputSubAction)
+    group.add_argument('--pos','-p', nargs=2, dest='pos', type=int, help='X and y positions of left bottom angle of output image. First argument is x position and second argument is y position.', action=OutputSubAction)
+    group.add_argument('--sw', nargs=1, dest='w', type=int, help='Width of output image.', action=OutputSubAction)
+    group.add_argument('--sh', nargs=1, dest='h', type=int, help='Height of output image.', action=OutputSubAction)
+    group.add_argument('--size','-s', nargs=2, dest='s', type=int, help='width and height of output image. First argument is width and second argument is height.', action=OutputSubAction)
+    group.add_argument('--file','-f', nargs=1, dest='f', type=str, help='Name of output image file.', action=OutputSubAction)
+    group.add_argument('--verbose', dest='verbose', help='verbose output', action='store_false')
     return parser.parse_args()
 
 
@@ -96,9 +93,6 @@ def Main():
             output_item.size.x = input_image.width
         if output_item.size.y is None:
             output_item.size.y = input_image.height
-        print(output_item)
-        print(output_item.size.x)
-        print(output_item.size.y)
 
         new_image_size = pgmagick.Geometry()
         new_image_size.width(int(output_item.size.x))
@@ -107,13 +101,10 @@ def Main():
         new_image_size.yOff(int(output_item.pos.y))
         new_image = pgmagick.Image(input_image.img)
         new_image.crop(new_image_size);
-
         new_image.write(output_item.file)
-
-        help(new_image)
 
         if args.verbose:
             print("Output image \""+output_item.file+"\" was write.")
-            print("image size: "+str(new_image.geometry.width())+"x"+str(new_image.geometry.height))
+            print("image size: "+str(new_image.columns())+"x"+str(new_image.rows()))
 
 Main()
